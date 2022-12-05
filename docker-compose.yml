@@ -23,6 +23,6 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: sa
       ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
-      ME_CONFIG_MONGODB_URL: mongodb://sa:123456@mongo:27017/nest-pokedex
+      ME_CONFIG_MONGODB_URL: mongodb://sa:123456@mongo:27017
 
       
