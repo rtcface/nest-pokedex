@@ -1,20 +1,30 @@
+import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
-import { MongooseModule } from '@nestjs/mongoose';
+
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
+import { EnvConfiguration } from './config/app.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot( {
+      load: [ EnvConfiguration ]
+    } ),
     PokemonModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname,'..','public')
     }),
-    MongooseModule.forRoot('mongodb://pokemon:123456@localhost:27017/nest-pokedex'),
+    MongooseModule.forRoot(process.env.MONGODB),
     CommonModule,
     SeedModule,
   ], 
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    //console.log(process.env);
+  }
+}
