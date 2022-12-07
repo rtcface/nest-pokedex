@@ -1,6 +1,30 @@
 version: '3'
 
 services:
+  db:
+    container_name: mongo
+    image: mongo:5
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./datamaster:/data/db
+      - ./InitDB/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:      
+      MONGO_INITDB_ROOT_USERNAME: ${DB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  
+      MONGO_INITDB_DATABASE: ${DB_INIT}
+  mongo-express:
+    depends_on:
+      - db
+    image: mongo-express:1.0.0-alpha.4
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${DB_ROOT_USERNAME}:${DB_ROOT_PASSWORD}@mongo:27017
   pokedexapp:
     depends_on:
       - db
@@ -17,16 +41,19 @@ services:
       MONGODB: ${MONGODB}
       PORT: ${PORT}
       DEFAULT_LIMIT: ${DEFAULT_LIMIT}
-    # volumes:
-    #   - ./:/var/www/pokedex
-
-  db:
-    image: mongo:5
-    container_name: mongo-poke
-    restart: always
-    ports:
-      - 27017:27017
-    environment:
-      MONGODB_DATABASE: nest-pokemon
     volumes:
-      - ./mongo:/data/db
+      - ./:/var/www/pokedex       
+  
+
+
+
+  # db:
+  #   image: mongo:5
+  #   container_name: mongo-poke
+  #   restart: always
+  #   ports:
+  #     - 27017:27017
+  #   environment:
+  #     MONGODB_DATABASE: nest-pokemon
+  #   volumes:
+  #     - ./mongo:/data/db
