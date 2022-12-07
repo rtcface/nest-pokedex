@@ -16,7 +16,16 @@ npm i -g @nest/cli
 ```
 docker-compose up -d
 ```
-5. rebuild database with see
+5. Clone file ```.env.template``` and rename ``` .env ```
+
+6. fill environment variables
+
+7. run app with
+```
+  yarn start:dev
+```
+
+6. Rebuild database with see
 ```
 localhost:3000/api/v2/seed
 ```
